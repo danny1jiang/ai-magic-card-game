@@ -2,20 +2,22 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import {CharacterSelectionList} from "@/components/CharacterSelection";
+import {CharacterInfoModal, CharacterSelectionList} from "@/components/CharacterSelection";
 import ReactModal from "react-modal";
 import {useEffect, useState} from "react";
 import {BackButton} from "@/components/BackButton";
 
 export default function Home() {
 	const [showModal, setShowModal] = useState(false);
+	const [stringJSON, setStringJSON] = useState("");
 
 	useEffect(() => {
 		ReactModal.setAppElement("#appElement");
 	}, []);
 
-	function handleCharacterClick(characterJSON) {
-		console.log(characterJSON);
+	function handleCharacterClick(stringJSON) {
+		console.log(stringJSON);
+		setStringJSON(stringJSON);
 		setShowModal(true);
 	}
 
@@ -48,9 +50,9 @@ export default function Home() {
 				<BackButton
 					onClick={() => {
 						setShowModal(false);
-						setModalContent("");
 					}}
 				/>
+				<CharacterInfoModal stringJSON={stringJSON} />
 			</ReactModal>
 
 			<main className={styles.main}>
