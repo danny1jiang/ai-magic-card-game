@@ -4,13 +4,21 @@ import {generateCharacters} from "@/AI";
 import styles from "../css/home.module.css";
 import {useEffect, useState} from "react";
 import {CustomButton} from "./CustomButton";
+import {AbilityComponent} from "./AbilityComponent";
+import {
+	getAbilityComponents,
+	getCharacterJSON,
+	setCharacterJSON,
+	updateAbilityComponents,
+} from "@/game/gameInfo";
+import Link from "next/link";
 
 export function CharacterSelectionList({onClick}) {
 	const [stringJSON, setStringJSON] = useState("");
 
 	let list = [];
 	useEffect(() => {
-		generateCharacters(3).then((characterJSONString) => {
+		generateCharacters(1).then((characterJSONString) => {
 			setStringJSON(characterJSONString);
 		});
 	}, []);
@@ -41,14 +49,31 @@ export function CharacterInfoModal({stringJSON}) {
 	let description = characterJSON.description;
 	let health = characterJSON.health;
 	let abilities = characterJSON.abilities;
+	let characterImagePrompt = characterJSON.imagePrompt;
 
-	let abilityComponents = [];
-	for (let i = 0; i < abilities.length; i++) {
-		abilityComponents.push(<AbilityComponent key={i} ability={abilities[i]} />);
+	updateAbilityComponents(characterJSON);
+	let abilityComponents = getAbilityComponents(name);
+
+	for (let i = 0; i < abilityComponents.length; i++) {
+		let imagePrompt = abilities[i].imagePrompt.replaceAll(" ", "-");
+
+		const url =
+			"https://image.pollinations.ai/prompt/" +
+			imagePrompt +
+			"?width=256&height=256&model=flux&seed=42&nologo=true";
+		//?width=1024&height=1024&model=flux&seed=42&nologo=true&enhance=false
+		/*const imageComponent = <img src={url} width={"100%"} alt="Ability Image" />;
+
+		abilityComponents.push(
+			<AbilityComponent key={i} abilityJSON={abilities[i]} imageComponent={imageComponent} />
+		);*/
 	}
 
 	function handleSelect() {
-		console.log(name);
+		console.log("set:");
+		console.log(characterJSON);
+		setCharacterJSON(characterJSON);
+		console.log(getCharacterJSON());
 	}
 
 	return (
@@ -58,16 +83,17 @@ export function CharacterInfoModal({stringJSON}) {
 			<h1>{health}</h1>
 			<div
 				style={{
-					display: "flex",
-					flex: 1,
-					flexDirection: "row",
-					justifyContent: "space-evenly",
+					width: "100%",
+					display: "grid",
+					justifyItems: "center",
+					gridTemplateColumns: "1fr 1fr 1fr 1fr",
+					overflow: "hidden",
 				}}
 			>
 				{abilityComponents}
 			</div>
-			<CustomButton onClick={handleSelect}>
-				<h3>Select</h3>
+			<CustomButton onClick={handleSelect} type={"link"} href="/game">
+				<h2>Select</h2>
 			</CustomButton>
 		</div>
 	);
@@ -77,6 +103,17 @@ function CharacterComponent({characterJSON, onClick}) {
 	let name = characterJSON.name;
 	let description = characterJSON.description;
 	let health = characterJSON.health;
+	let imagePrompt = characterJSON.imagePrompt;
+
+	//imagePrompt = imagePrompt.replaceAll(" ", "-");
+
+	const url =
+		"https://image.pollinations.ai/prompt/" +
+		imagePrompt +
+		"?width=256&height=256&model=flux&seed=42&nologo=true";
+
+	//const url = "https://image.pollinations.ai/prompt/" + "imagePrompt" + "?nologo=true";
+	console.log(url);
 
 	return (
 		<button
@@ -84,25 +121,9 @@ function CharacterComponent({characterJSON, onClick}) {
 			className={styles.characterContainer}
 		>
 			<h1>{name}</h1>
+			<img src={url} width={"100%"} alt="AI-generated logo" />
 			<h2>{description}</h2>
 			<h2>{health}</h2>
 		</button>
-	);
-}
-
-function AbilityComponent({ability}) {
-	let name = ability.name;
-	let type = ability.type;
-	let description = ability.description;
-	let priority = ability.priority;
-	let cost = ability.cost;
-	let baseDamage = ability.baseDamage;
-
-	return (
-		<div className={styles.abilityComponent}>
-			<h1>{name}</h1>
-			<h2>Type: {type}</h2>
-			<h2>{description}</h2>
-		</div>
 	);
 }
