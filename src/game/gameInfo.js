@@ -3,6 +3,7 @@ import {AbilityComponent} from "@/components/AbilityComponent";
 
 let abilityComponents = {};
 let characterJSON;
+let enemyJSON;
 
 export function getAbilityComponents(name) {
 	return abilityComponents[name];
@@ -33,14 +34,36 @@ export function updateAbilityComponents(characterJSON) {
 
 export function getCharacterJSON() {
 	if (characterJSON === undefined) {
-		const json = JSON.parse(localStorage.getItem("characterJSON"));
-		characterJSON = json;
-		return json;
+		if (global.window !== undefined) {
+			const json = JSON.parse(global.window.localStorage.getItem("characterJSON"));
+			characterJSON = json;
+			return json;
+		}
 	}
 	return characterJSON;
 }
 
 export function setCharacterJSON(json) {
 	characterJSON = json;
-	localStorage.setItem("characterJSON", JSON.stringify(json));
+	if (global.window !== undefined) {
+		global.window.localStorage.setItem("characterJSON", JSON.stringify(json));
+	}
+}
+
+export function getEnemyJSON() {
+	if (enemyJSON === undefined) {
+		if (global.window !== undefined) {
+			const json = JSON.parse(global.window.localStorage.getItem("enemyJSON"));
+			enemyJSON = json;
+			return json;
+		}
+	}
+	return enemyJSON;
+}
+
+export function setEnemyJSON(json) {
+	enemyJSON = json;
+	if (global.window !== undefined) {
+		global.window.localStorage.setItem("enemyJSON", JSON.stringify(json));
+	}
 }

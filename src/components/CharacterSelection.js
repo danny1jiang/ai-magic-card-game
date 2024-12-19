@@ -1,6 +1,6 @@
 "use client";
 
-import {generateCharacters} from "@/AI";
+import {generateCharacters} from "@/ai/characterGenerationAI";
 import styles from "../css/home.module.css";
 import {useEffect, useState} from "react";
 import {CustomButton} from "./CustomButton";
@@ -9,6 +9,7 @@ import {
 	getAbilityComponents,
 	getCharacterJSON,
 	setCharacterJSON,
+	setEnemyJSON,
 	updateAbilityComponents,
 } from "@/game/gameInfo";
 import Link from "next/link";
@@ -18,8 +19,13 @@ export function CharacterSelectionList({onClick}) {
 
 	let list = [];
 	useEffect(() => {
-		generateCharacters(1).then((characterJSONString) => {
-			setStringJSON(characterJSONString);
+		generateCharacters(2).then((characterJSONString) => {
+			let json = JSON.parse(characterJSONString);
+			let enemyJSON = json.characters[0];
+			setEnemyJSON(enemyJSON);
+
+			json.characters.splice(0, 1);
+			setStringJSON(JSON.stringify(json));
 		});
 	}, []);
 
@@ -99,7 +105,7 @@ export function CharacterInfoModal({stringJSON}) {
 	);
 }
 
-function CharacterComponent({characterJSON, onClick}) {
+export function CharacterComponent({characterJSON, onClick}) {
 	let name = characterJSON.name;
 	let description = characterJSON.description;
 	let health = characterJSON.health;

@@ -1,4 +1,4 @@
-import {getPlayerDiscard, getPlayerHand, playAction, setupPlayerHand} from "@/game/playerState";
+import {getPlayerHand, playActions, setupPlayerHand} from "@/game/playerHandInfo";
 import styles from "../game.module.css";
 import {useEffect, useState} from "react";
 import {AbilityComponent} from "@/components/AbilityComponent";
@@ -7,7 +7,7 @@ import {CustomButton} from "@/components/CustomButton";
 export function AbilityHand({abilityJSONList}) {
 	const [currentHand, setCurrentHand] = useState([]);
 	const [abilityHandComponents, setAbilityHandComponents] = useState([]);
-	const [selectedCard, setSelectedCard] = useState(-1);
+	const [selectedCards, setSelectedCards] = useState([]);
 
 	useEffect(() => {
 		setupPlayerHand(abilityJSONList);
@@ -16,43 +16,41 @@ export function AbilityHand({abilityJSONList}) {
 
 	useEffect(() => {
 		let abilityHandComponents = [];
-		console.log(currentHand);
 		for (let i = 0; i < currentHand.length; i++) {
 			abilityHandComponents.push(
 				<CardComponent
 					key={i}
 					index={i}
 					abilityJSON={currentHand[i]}
-					selectedCard={selectedCard}
+					isSelected={selectedCards.includes(i)}
 					onClick={() => handleSelect(i)}
 				/>
 			);
 		}
 		setAbilityHandComponents(abilityHandComponents);
-	}, [currentHand, selectedCard]);
+	}, [currentHand, selectedCards]);
 
-	function handleConfirm(num) {
-		if (num !== -1) {
-			console.log(num);
-			playAction(num);
+	function handleConfirm(selectedCards) {
+		if (selectedCards.length > 0) {
+			playActions(selectedCards);
 			setCurrentHand([...getPlayerHand()]);
-			setSelectedCard(-1);
+			setSelectedCards([]);
 		}
 	}
 
-	console.log(selectedCard);
-
 	function handleSelect(num) {
-		if (selectedCard === num) {
-			setSelectedCard(-1);
+		if (selectedCards.includes(num)) {
+			let tempSelectedCards = [...selectedCards];
+			tempSelectedCards.splice(tempSelectedCards.indexOf(num), 1);
+			setSelectedCards(tempSelectedCards);
 		} else {
-			setSelectedCard(num);
+			setSelectedCards([...selectedCards, num]);
 		}
 	}
 
 	return (
 		<div className={styles.bottomContainer}>
-			<CustomButton onClick={() => handleConfirm(selectedCard)}>
+			<CustomButton onClick={() => handleConfirm(selectedCards)}>
 				<h2>Confirm</h2>
 			</CustomButton>
 
@@ -61,9 +59,9 @@ export function AbilityHand({abilityJSONList}) {
 	);
 }
 
-function CardComponent({selectedCard, onClick, index, abilityJSON}) {
+function CardComponent({isSelected, onClick, abilityJSON}) {
 	let style = {borderWidth: 10, borderStyle: "solid"};
-	if (selectedCard === index) {
+	if (isSelected) {
 		style = {...style, borderColor: "white"};
 	}
 
