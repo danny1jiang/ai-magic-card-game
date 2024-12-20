@@ -67,10 +67,14 @@ export function CharacterInfoModal({stringJSON}) {
 			"https://image.pollinations.ai/prompt/" +
 			imagePrompt +
 			"?width=256&height=256&model=flux&seed=42&nologo=true";
-		//?width=1024&height=1024&model=flux&seed=42&nologo=true&enhance=false
-		/*const imageComponent = <img src={url} width={"100%"} alt="Ability Image" />;
 
-		abilityComponents.push(
+		/*fetch(url).then((response) => {
+			console.log(response);
+		});*/
+		//?width=1024&height=1024&model=flux&seed=42&nologo=true&enhance=false
+		const imageComponent = <img src={url} width={"100%"} alt="Ability Image" />;
+
+		/*abilityComponents.push(
 			<AbilityComponent key={i} abilityJSON={abilities[i]} imageComponent={imageComponent} />
 		);*/
 	}
@@ -81,6 +85,7 @@ export function CharacterInfoModal({stringJSON}) {
 		setCharacterJSON(characterJSON);
 		console.log(getCharacterJSON());
 	}
+	abilityComponents = [];
 
 	return (
 		<div className={styles.characterInfo}>

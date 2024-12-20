@@ -36,20 +36,18 @@ export function AbilityHand({
 	}, [currentHand, selectedCards]);
 
 	async function handleConfirm(selectedCards) {
-		if (selectedCards.length > 0) {
-			let playerPlayedCards = [];
-			for (let i = 0; i < selectedCards.length; i++) {
-				playerPlayedCards.push(currentHand[selectedCards[i]]);
-			}
-			setPlayerPlayedCards(playerPlayedCards);
-			let promise = playActions(selectedCards);
-			setCurrentHand([...getPlayerHand()]);
-			setSelectedCards([]);
-
-			let {playerActions, enemyActions, resultJSON} = await promise;
-			setEnemyPlayedCards(enemyActions);
-			onRoundEnd(resultJSON);
+		let playerPlayedCards = [];
+		for (let i = 0; i < selectedCards.length; i++) {
+			playerPlayedCards.push(currentHand[selectedCards[i]]);
 		}
+		setPlayerPlayedCards(playerPlayedCards);
+		let promise = playActions(selectedCards);
+		setCurrentHand([...getPlayerHand()]);
+		setSelectedCards([]);
+
+		let {playerActions, enemyActions, resultJSON} = await promise;
+		setEnemyPlayedCards(enemyActions);
+		onRoundEnd(resultJSON);
 	}
 
 	function handleSelect(num) {

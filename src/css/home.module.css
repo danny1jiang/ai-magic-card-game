@@ -24,6 +24,7 @@
 
 .abilityComponent {
 	display: flex;
+	border: none;
 	flex-direction: column;
 	align-items: center;
 	width: 15vw;

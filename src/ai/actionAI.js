@@ -1,4 +1,4 @@
-import {getAPIKey} from "@/serverUtils";
+import {getAPIKey} from "@/utils/serverUtils";
 import {GoogleGenerativeAI, HarmCategory, HarmBlockThreshold} from "@google/generative-ai";
 
 let chatSession;
