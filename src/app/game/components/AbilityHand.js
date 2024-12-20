@@ -4,7 +4,12 @@ import {useEffect, useState} from "react";
 import {AbilityComponent} from "@/components/AbilityComponent";
 import {CustomButton} from "@/components/CustomButton";
 
-export function AbilityHand({abilityJSONList}) {
+export function AbilityHand({
+	abilityJSONList,
+	setPlayerPlayedCards,
+	setEnemyPlayedCards,
+	onRoundEnd,
+}) {
 	const [currentHand, setCurrentHand] = useState([]);
 	const [abilityHandComponents, setAbilityHandComponents] = useState([]);
 	const [selectedCards, setSelectedCards] = useState([]);
@@ -30,11 +35,20 @@ export function AbilityHand({abilityJSONList}) {
 		setAbilityHandComponents(abilityHandComponents);
 	}, [currentHand, selectedCards]);
 
-	function handleConfirm(selectedCards) {
+	async function handleConfirm(selectedCards) {
 		if (selectedCards.length > 0) {
-			playActions(selectedCards);
+			let playerPlayedCards = [];
+			for (let i = 0; i < selectedCards.length; i++) {
+				playerPlayedCards.push(currentHand[selectedCards[i]]);
+			}
+			setPlayerPlayedCards(playerPlayedCards);
+			let promise = playActions(selectedCards);
 			setCurrentHand([...getPlayerHand()]);
 			setSelectedCards([]);
+
+			let {playerActions, enemyActions, resultJSON} = await promise;
+			setEnemyPlayedCards(enemyActions);
+			onRoundEnd(resultJSON);
 		}
 	}
 

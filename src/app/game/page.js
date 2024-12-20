@@ -8,23 +8,79 @@ import {initializeActionAI} from "@/ai/actionAI";
 import {initializeEnemyAI} from "@/ai/enemyAI";
 import {GameState} from "@/game/gameState";
 import {setupEnemyHand} from "@/game/enemyHandInfo";
+import ReactModal from "react-modal";
+import {AbilityComponent} from "@/components/AbilityComponent";
+import {PlayedCards} from "./components/PlayedCards";
+import {ChatComponent} from "./components/ChatComponent";
 
 export default function GamePage() {
 	const [initialized, setInitialized] = useState(false);
+	const [playerActions, setPlayerActions] = useState();
+	const [enemyActions, setEnemyActions] = useState();
+	const [showModal, setShowModal] = useState(false);
+
+	const [playerState, setPlayerState] = useState({});
+	const [enemyState, setEnemyState] = useState({});
+
+	const [chatMessages, setChatMessages] = useState([]);
 
 	useEffect(() => {
 		initializeActionAI();
 		initializeEnemyAI(getEnemyJSON());
 		setupEnemyHand(getEnemyJSON().abilities);
 		GameState.initializeGameState(getCharacterJSON(), getEnemyJSON());
+		setPlayerState({health: GameState.getPlayerHealth(), mana: GameState.getPlayerMana()});
+		setEnemyState({health: GameState.getEnemyHealth(), mana: GameState.getEnemyMana()});
 		setInitialized(true);
 	}, []);
+
+	function setPlayerPlayedCards(playerActions) {
+		setPlayerActions(playerActions);
+		setShowModal(true);
+	}
+
+	function setEnemyPlayedCards(enemyActions) {
+		setEnemyActions(enemyActions);
+	}
+
+	function closeModal() {
+		setShowModal(false);
+		setEnemyActions(undefined);
+		setPlayerActions(undefined);
+	}
+
+	function onRoundEnd(resultJSON) {
+		let playerState = {health: 0, mana: 0};
+		let enemyState = {health: 0, mana: 0};
+
+		playerState.health = GameState.getPlayerHealth();
+		playerState.mana = GameState.getPlayerMana();
+
+		enemyState.health = GameState.getEnemyHealth();
+		enemyState.mana = GameState.getEnemyMana();
+
+		setPlayerState(playerState);
+		setEnemyState(enemyState);
+
+		setChatMessages([...chatMessages, resultJSON.description]);
+	}
 
 	if (!initialized) return null;
 
 	return (
-		<div className={styles.gameContainer}>
-			<AbilityHand abilityJSONList={getCharacterJSON().abilities} />
+		<div id="gamePage" className={styles.gameContainer}>
+			<PlayedCards
+				show={showModal}
+				closeModal={closeModal}
+				playerPlayedCards={playerActions}
+				enemyPlayedCards={enemyActions}
+			/>
+			<AbilityHand
+				abilityJSONList={getCharacterJSON().abilities}
+				setPlayerPlayedCards={setPlayerPlayedCards}
+				setEnemyPlayedCards={setEnemyPlayedCards}
+				onRoundEnd={onRoundEnd}
+			/>
 			<div
 				style={{
 					display: "flex",
@@ -33,9 +89,29 @@ export default function GamePage() {
 					flex: 1,
 				}}
 			>
-				<CharacterComponent characterJSON={getCharacterJSON()} />
-				<CharacterComponent characterJSON={getEnemyJSON()} />
+				<div style={inlineStyles.characterContainer}>
+					<CharacterComponent characterJSON={getCharacterJSON()} />
+					<h2>{playerState.health}</h2>
+					<h2>{playerState.mana}</h2>
+				</div>
+				<ChatComponent chatMessages={chatMessages} />
+				<div style={inlineStyles.characterContainer}>
+					<CharacterComponent characterJSON={getEnemyJSON()} />
+					<h2>{enemyState.health}</h2>
+					<h2>{enemyState.mana}</h2>
+				</div>
 			</div>
 		</div>
 	);
 }
+
+const inlineStyles = {
+	characterContainer: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		flex: 0.2,
+		flexDirection: "column",
+		backgroundColor: "red",
+	},
+};

@@ -24,7 +24,7 @@ export function setupPlayerHand(abilityJSONList) {
 	}
 }
 
-export function playActions(hand) {
+export async function playActions(hand) {
 	let playedActions = [];
 
 	let handLength = hand.length;
@@ -46,5 +46,5 @@ export function playActions(hand) {
 		currentHand.push(newAction);
 	}
 
-	startNewRound(playedActions);
+	return await startNewRound(playedActions);
 }

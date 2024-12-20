@@ -59,4 +59,10 @@ export async function startNewRound(playedActions) {
 	console.log(GameState.getEnemyHealth());
 	console.log(GameState.getPlayerMana());
 	console.log(GameState.getEnemyMana());
+
+	return {
+		enemyActions: enemyActions,
+		playerActions: playedActions,
+		resultJSON: resultJSON,
+	};
 }
