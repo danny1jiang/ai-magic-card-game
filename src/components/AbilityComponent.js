@@ -35,7 +35,7 @@ export function AbilityComponent({abilityJSON, showBack}) {
 					position: "absolute",
 					zIndex: 1,
 					bottom: 0,
-					height: "30%",
+					height: "29%",
 					fontSize: "1vh",
 				}}
 			>
@@ -134,14 +134,16 @@ function AbilityInfoComponent({type, priority, cost, baseDamage, description}) {
 				padding: "10%",
 				display: "flex",
 				flexDirection: "column",
-				alignItems: "center",
+				alignItems: "flex-start",
 				background: "radial-gradient(#eae7df, #dbd1bf)",
 				fontSize: "1vh",
 			}}
 		>
 			<h2>Priority: {priority}</h2>
 			<h2>Base Damage: {baseDamage}</h2>
-			<h2>{description}</h2>
+			<div style={{marginTop: "1vh"}}>
+				<h2 style={{fontSize: "1.3vh"}}>{description}</h2>
+			</div>
 		</div>
 	);
 }

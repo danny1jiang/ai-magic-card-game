@@ -156,7 +156,7 @@ export function CharacterComponent({characterJSON, onClick}) {
 					position: "absolute",
 					zIndex: 3,
 					bottom: 0,
-					height: "30%",
+					height: "32%",
 					width: "70%",
 					fontSize: "1vh",
 				}}

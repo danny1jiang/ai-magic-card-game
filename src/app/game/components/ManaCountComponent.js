@@ -56,10 +56,21 @@ export function ManaCountComponent({manaCount, manaCost}) {
 				alignItems: "center",
 				height: "100%",
 				color: "white",
-				fontSize: "3vh",
+				fontSize: "1.5vw",
 			}}
 		>
-			<h1>Mana</h1>
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					width: "100%",
+					marginBottom: "5%",
+				}}
+			>
+				<h1>Mana</h1>
+				<div style={{backgroundColor: "white", width: "100%", height: "0.4vh"}} />
+			</div>
 			<div className={styles.manaCountComponent}>{manaCrystals}</div>
 		</div>
 	);

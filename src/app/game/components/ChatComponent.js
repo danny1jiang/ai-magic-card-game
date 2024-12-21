@@ -26,7 +26,6 @@ function ChatChunkComponent({json, index}) {
 				marginRight: "10px",
 			}}
 		>
-			<h1>Round {index + 1}</h1>
 			<div
 				style={{
 					backgroundColor: "#32373d",
@@ -34,8 +33,18 @@ function ChatChunkComponent({json, index}) {
 					padding: "2%",
 				}}
 			>
-				<h2>{message}</h2>
-				<div style={{marginTop: "5px"}}>
+				<h1>Round {index + 1}</h1>
+				<h2
+					style={{
+						marginTop: "15px",
+						marginBottom: "7.5px",
+						fontWeight: "normal",
+						color: "#e1e1e1",
+					}}
+				>
+					{message}
+				</h2>
+				<div>
 					<h2>Player Damage Taken: {playerDamage}</h2>
 					<h2>Enemy Damage Taken: {enemyDamage}</h2>
 				</div>

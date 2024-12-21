@@ -102,6 +102,9 @@ export function AbilityHand({hasWon, setPlayerPlayedCards, setEnemyPlayedCards, 
 					<CustomButton onClick={() => handleConfirm(selectedCards)}>
 						<h2>Confirm</h2>
 					</CustomButton>
+					<CustomButton type="link" href="/">
+						<h2>Leave</h2>
+					</CustomButton>
 				</div>
 			</div>
 		</div>
