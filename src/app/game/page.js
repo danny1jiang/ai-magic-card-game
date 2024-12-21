@@ -13,12 +13,15 @@ import {AbilityComponent} from "@/components/AbilityComponent";
 import {PlayedCards} from "./components/PlayedCards";
 import {ChatComponent} from "./components/ChatComponent";
 import ProgressBar from "@ramonak/react-progress-bar";
+import {GameEndComponent} from "./components/GameEndComponent";
+import {setupPlayerHand} from "@/game/playerHandInfo";
 
 export default function GamePage() {
 	const [initialized, setInitialized] = useState(false);
 	const [playerActions, setPlayerActions] = useState();
 	const [enemyActions, setEnemyActions] = useState();
 	const [showModal, setShowModal] = useState(false);
+	const [hasWon, setHasWon] = useState(false);
 
 	const [playerState, setPlayerState] = useState({});
 	const [enemyState, setEnemyState] = useState({});
@@ -26,14 +29,20 @@ export default function GamePage() {
 	const [chatMessagesJSON, setChatMessagesJSON] = useState([]);
 
 	useEffect(() => {
+		initializeGame();
+	}, []);
+
+	function initializeGame() {
+		setChatMessagesJSON([]);
 		initializeActionAI();
 		initializeEnemyAI(getEnemyJSON());
 		setupEnemyHand(getEnemyJSON().abilities);
+		setupPlayerHand(getCharacterJSON().abilities);
 		GameState.initializeGameState(getCharacterJSON(), getEnemyJSON());
 		setPlayerState({health: GameState.getPlayerHealth(), mana: GameState.getPlayerMana()});
 		setEnemyState({health: GameState.getEnemyHealth(), mana: GameState.getEnemyMana()});
 		setInitialized(true);
-	}, []);
+	}
 
 	function setPlayerPlayedCards(playerActions) {
 		setPlayerActions(playerActions);
@@ -48,6 +57,10 @@ export default function GamePage() {
 		setShowModal(false);
 		setEnemyActions(undefined);
 		setPlayerActions(undefined);
+
+		if (GameState.getPlayerHealth() <= 0 || GameState.getEnemyHealth() <= 0) {
+			setHasWon(true);
+		}
 	}
 
 	function onRoundEnd(resultJSON) {
@@ -71,8 +84,14 @@ export default function GamePage() {
 	let characterJSON = getCharacterJSON();
 	let enemyJSON = getEnemyJSON();
 
+	function handleTryAgain() {
+		setHasWon(false);
+		initializeGame();
+	}
+
 	return (
 		<div id="gamePage" className={styles.gameContainer}>
+			<GameEndComponent show={hasWon} onTryAgain={handleTryAgain} />
 			<PlayedCards
 				show={showModal}
 				closeModal={closeModal}
@@ -80,7 +99,7 @@ export default function GamePage() {
 				enemyPlayedCards={enemyActions}
 			/>
 			<AbilityHand
-				abilityJSONList={characterJSON.abilities}
+				hasWon={hasWon}
 				setPlayerPlayedCards={setPlayerPlayedCards}
 				setEnemyPlayedCards={setEnemyPlayedCards}
 				onRoundEnd={onRoundEnd}

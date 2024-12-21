@@ -31,7 +31,9 @@ export function PlayedCards({show, playerPlayedCards, enemyPlayedCards, closeMod
 			<div className={styles.playedCardsOneSide}>{enemyPlayedCardsComponents}</div>
 			<h1>Your Cards:</h1>
 			<div className={styles.playedCardsOneSide}>{playerPlayedCardsComponents}</div>
-			<CustomButton onClick={closeModal}>Next</CustomButton>
+			{enemyPlayedCards !== undefined ? (
+				<CustomButton onClick={closeModal}>Next</CustomButton>
+			) : null}
 		</div>
 	);
 }

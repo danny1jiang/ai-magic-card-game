@@ -32,8 +32,8 @@ export async function startNewRound(playedActions) {
 	let newPlayerHealth = playerHealth - playerDamage;
 	let newEnemyHealth = enemyHealth - enemyDamage;
 
-	GameState.setPlayerHealth(newPlayerHealth);
-	GameState.setEnemyHealth(newEnemyHealth);
+	GameState.setPlayerHealth(Math.max(newPlayerHealth, 0));
+	GameState.setEnemyHealth(Math.max(newEnemyHealth, 0));
 
 	// Mana updates
 	let playerMana = GameState.getPlayerMana();
@@ -52,8 +52,8 @@ export async function startNewRound(playedActions) {
 	let newPlayerMana = playerMana - playerManaCost + 2;
 	let newEnemyMana = enemyMana - enemyManaCost + 2;
 
-	GameState.setPlayerMana(Math.min(GameState.getMaxMana(), newPlayerMana));
-	GameState.setEnemyMana(Math.min(GameState.getMaxMana(), newEnemyMana));
+	GameState.setPlayerMana(Math.max(Math.min(GameState.getMaxMana(), newPlayerMana), 0));
+	GameState.setEnemyMana(Math.max(Math.min(GameState.getMaxMana(), newEnemyMana), 0));
 
 	console.log(GameState.getPlayerHealth());
 	console.log(GameState.getEnemyHealth());

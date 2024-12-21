@@ -80,3 +80,16 @@
 	row-gap: 1vh;
 	width: 100%;
 }
+
+.gameEndComponent {
+	display: flex;
+	position: absolute;
+	z-index: 4;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+}

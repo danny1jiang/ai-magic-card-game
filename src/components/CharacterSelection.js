@@ -25,6 +25,7 @@ export function CharacterSelectionList({onClick}) {
 			console.log("player json");
 			console.log(playerJSON);
 			setEnemyJSON(enemyJSON);
+			setCharacterJSON(playerJSON);
 			setPlayerJSON(playerJSON);
 		});
 		/*generateCharacters(2).then((characterJSONString) => {
@@ -93,7 +94,7 @@ export function CharacterInfoModal({stringJSON}) {
 	function handleSelect() {
 		console.log("set:");
 		console.log(characterJSON);
-		setCharacterJSON(characterJSON);
+		//setCharacterJSON(characterJSON);
 		console.log(getCharacterJSON());
 	}
 	abilityComponents = [];
@@ -131,8 +132,6 @@ export function CharacterComponent({characterJSON, onClick}) {
 		"https://image.pollinations.ai/prompt/" +
 		imagePrompt +
 		"?width=256&height=256&model=flux&seed=42&nologo=true";
-
-	console.log(url);
 
 	return (
 		<div

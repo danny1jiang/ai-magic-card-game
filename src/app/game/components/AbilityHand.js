@@ -7,12 +7,7 @@ import {GameState} from "@/game/gameState";
 import goldenRim from "../../../assets/goldenRim.png";
 import {ManaCountComponent} from "./ManaCountComponent";
 
-export function AbilityHand({
-	abilityJSONList,
-	setPlayerPlayedCards,
-	setEnemyPlayedCards,
-	onRoundEnd,
-}) {
+export function AbilityHand({hasWon, setPlayerPlayedCards, setEnemyPlayedCards, onRoundEnd}) {
 	const [currentHand, setCurrentHand] = useState([]);
 	const [abilityHandComponents, setAbilityHandComponents] = useState([]);
 	const [selectedCards, setSelectedCards] = useState([]);
@@ -20,9 +15,12 @@ export function AbilityHand({
 	const [manaCost, setManaCost] = useState(0);
 
 	useEffect(() => {
-		setupPlayerHand(abilityJSONList);
 		setCurrentHand([...getPlayerHand()]);
-	}, []);
+		if (hasWon === false) {
+			setManaCount(GameState.getMaxMana());
+			setManaCost(0);
+		}
+	}, [hasWon]);
 
 	useEffect(() => {
 		let abilityHandComponents = [];
