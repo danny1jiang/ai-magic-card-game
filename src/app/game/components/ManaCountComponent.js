@@ -55,9 +55,11 @@ export function ManaCountComponent({manaCount, manaCost}) {
 				justifyContent: "center",
 				alignItems: "center",
 				height: "100%",
+				color: "white",
+				fontSize: "3vh",
 			}}
 		>
-			<h1>Mana Count</h1>
+			<h1>Mana</h1>
 			<div className={styles.manaCountComponent}>{manaCrystals}</div>
 		</div>
 	);
