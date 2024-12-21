@@ -13,29 +13,36 @@ import {
 	updateAbilityComponents,
 } from "@/game/gameInfo";
 import Link from "next/link";
+import {addCharacterJSONToDatabase, getDatabaseCharacterJSON} from "@/firebase";
+import characterCardBorder from "../assets/characterCardBorder.png";
 
 export function CharacterSelectionList({onClick}) {
-	const [stringJSON, setStringJSON] = useState("");
+	const [playerJSON, setPlayerJSON] = useState("");
 
 	let list = [];
 	useEffect(() => {
-		generateCharacters(2).then((characterJSONString) => {
-			let json = JSON.parse(characterJSONString);
-			let enemyJSON = json.characters[0];
+		getDatabaseCharacterJSON().then(({playerJSON, enemyJSON}) => {
+			console.log("player json");
+			console.log(playerJSON);
 			setEnemyJSON(enemyJSON);
-
-			json.characters.splice(0, 1);
-			setStringJSON(JSON.stringify(json));
+			setPlayerJSON(playerJSON);
 		});
+		/*generateCharacters(2).then((characterJSONString) => {
+			let json = JSON.parse(characterJSONString);
+
+			let enemyJSON = json.characters[0];
+			json.characters.splice(0, 1);
+
+			loadImages(json.characters[0], enemyJSON);
+			addCharacterJSONToDatabase(json.characters[0], enemyJSON);
+		});*/
 	}, []);
 
-	if (stringJSON == "") {
+	if (playerJSON == "") {
 		return null;
 	} else {
 		let list = [];
-		let characterJSONList = JSON.parse(stringJSON);
-		console.log(characterJSONList.characters.length);
-		for (let i = 0; i < characterJSONList.characters.length; i++) {
+		/*for (let i = 0; i < characterJSONList.characters.length; i++) {
 			list.push(
 				<CharacterComponent
 					key={i}
@@ -43,7 +50,8 @@ export function CharacterSelectionList({onClick}) {
 					characterJSON={characterJSONList.characters[i]}
 				/>
 			);
-		}
+		}*/
+		list.push(<CharacterComponent key={0} onClick={onClick} characterJSON={playerJSON} />);
 		return <div className={styles.characterListContainer}>{list}</div>;
 	}
 }
@@ -60,7 +68,7 @@ export function CharacterInfoModal({stringJSON}) {
 	updateAbilityComponents(characterJSON);
 	let abilityComponents = getAbilityComponents(name);
 
-	for (let i = 0; i < abilityComponents.length; i++) {
+	/*for (let i = 0; i < abilityComponents.length; i++) {
 		let imagePrompt = abilities[i].imagePrompt.replaceAll(" ", "-");
 
 		const url =
@@ -68,16 +76,19 @@ export function CharacterInfoModal({stringJSON}) {
 			imagePrompt +
 			"?width=256&height=256&model=flux&seed=42&nologo=true";
 
-		/*fetch(url).then((response) => {
+		fetch(url).then((response) => {
 			console.log(response);
-		});*/
+		});
 		//?width=1024&height=1024&model=flux&seed=42&nologo=true&enhance=false
-		const imageComponent = <img src={url} width={"100%"} alt="Ability Image" />;
+		fetch(url, {
+			method: "GET",
+			mode: "cors",
+		}).then((response) => console.log(response));
 
-		/*abilityComponents.push(
+		abilityComponents.push(
 			<AbilityComponent key={i} abilityJSON={abilities[i]} imageComponent={imageComponent} />
-		);*/
-	}
+		);
+	}*/
 
 	function handleSelect() {
 		console.log("set:");
@@ -116,25 +127,112 @@ export function CharacterComponent({characterJSON, onClick}) {
 	let health = characterJSON.health;
 	let imagePrompt = characterJSON.imagePrompt;
 
-	//imagePrompt = imagePrompt.replaceAll(" ", "-");
-
 	const url =
 		"https://image.pollinations.ai/prompt/" +
 		imagePrompt +
 		"?width=256&height=256&model=flux&seed=42&nologo=true";
 
-	//const url = "https://image.pollinations.ai/prompt/" + "imagePrompt" + "?nologo=true";
 	console.log(url);
 
 	return (
-		<button
+		<div
 			onClick={() => onClick(JSON.stringify(characterJSON))}
 			className={styles.characterContainer}
 		>
-			<h1>{name}</h1>
-			<img src={url} width={"100%"} alt="AI-generated logo" />
-			<h2>{description}</h2>
-			<h2>{health}</h2>
-		</button>
+			<img
+				style={{
+					position: "absolute",
+					pointerEvents: "none",
+					zIndex: 2,
+				}}
+				width={"97%"}
+				src={characterCardBorder.src}
+			/>
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "center",
+					textAlign: "center",
+					position: "absolute",
+					zIndex: 3,
+					bottom: 0,
+					height: "30%",
+					width: "70%",
+					fontSize: "1vh",
+				}}
+			>
+				<h2>{description}</h2>
+			</div>
+			<img
+				style={{
+					position: "absolute",
+					pointerEvents: "none",
+					userSelect: "none",
+					top: "8%",
+					objectFit: "cover",
+					pointerEvents: "none",
+					userSelect: "none",
+					outline: "rgb(0,0,0,0.5) solid 1.5vh",
+					zIndex: 1,
+				}}
+				src={url}
+				width={"76%"}
+				alt="Character Image"
+			/>
+			<img
+				style={{
+					position: "absolute",
+					pointerEvents: "none",
+					userSelect: "none",
+					pointerEvents: "none",
+					userSelect: "none",
+					top: 0,
+				}}
+				src={url}
+				width={"80%"}
+				height={"70%"}
+				alt="Character Image"
+			/>
+		</div>
 	);
+}
+
+function loadImages(characterJSON, enemyJSON) {
+	let url =
+		"https://image.pollinations.ai/prompt/" +
+		characterJSON.imagePrompt +
+		"?width=256&height=256&model=flux&seed=42&nologo=true";
+
+	fetch(url, {
+		method: "GET",
+		mode: "cors",
+	}).then((response) => console.log(response));
+
+	url =
+		"https://image.pollinations.ai/prompt/" +
+		enemyJSON.imagePrompt +
+		"?width=256&height=256&model=flux&seed=42&nologo=true";
+
+	fetch(url, {
+		method: "GET",
+		mode: "cors",
+	}).then((response) => console.log(response));
+
+	let abilities = [...characterJSON.abilities, ...enemyJSON.abilities];
+	for (let i = 0; i < abilities.length; i++) {
+		let imagePrompt = abilities[i].imagePrompt;
+
+		const url =
+			"https://image.pollinations.ai/prompt/" +
+			imagePrompt +
+			"?width=256&height=256&model=flux&seed=42&nologo=true";
+
+		console.log(imagePrompt);
+
+		fetch(url, {
+			method: "GET",
+			mode: "cors",
+		}).then((response) => console.log(response));
+	}
 }

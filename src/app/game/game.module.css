@@ -3,24 +3,39 @@
 	flex-direction: column-reverse;
 	width: 100vw;
 	height: 100vh;
+	overflow: hidden;
 }
 
 .abilityHandContainer {
 	display: flex;
+	position: "relative";
 	flex-direction: row;
 	justify-content: space-evenly;
-	width: 100%;
-	background-color: red;
+	width: 80vh;
+	height: 100%;
+}
+
+.handAdjacentContainer {
+	display: flex;
+	flex: 0.3;
+	height: 100%;
+	flex-direction: row;
+	justify-content: space-evenly;
 }
 
 .bottomContainer {
 	display: flex;
+	flex: 0.4;
 	align-items: center;
-	flex-direction: column;
+	justify-content: space-evenly;
+	flex-direction: row;
 	width: 100%;
+	background-image: url("../../assets/woodenSurface.jpg");
+	background-size: cover;
 }
 
 .playedCardsContainer {
+	z-index: 2;
 	display: flex;
 	position: absolute;
 	flex-direction: column;

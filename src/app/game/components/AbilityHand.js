@@ -62,24 +62,42 @@ export function AbilityHand({
 
 	return (
 		<div className={styles.bottomContainer}>
-			<CustomButton onClick={() => handleConfirm(selectedCards)}>
-				<h2>Confirm</h2>
-			</CustomButton>
+			<div className={styles.handAdjacentContainer}>
+				<CustomButton onClick={() => handleConfirm(selectedCards)}>
+					<h2>Confirm</h2>
+				</CustomButton>
+			</div>
 
 			<div className={styles.abilityHandContainer}>{abilityHandComponents}</div>
+			<div className={styles.handAdjacentContainer}></div>
 		</div>
 	);
 }
 
-function CardComponent({isSelected, onClick, abilityJSON}) {
-	let style = {borderWidth: 10, borderStyle: "solid"};
+function CardComponent({index, isSelected, onClick, abilityJSON}) {
+	let bottom = -15;
+	if (index === 1 || index === 2) {
+		bottom = -10;
+	}
+
+	let style = {
+		position: "relative",
+		marginLeft: "-5vh",
+		marginRight: "-5vh",
+		borderStyle: "solid",
+		borderColor: "rgb(0,0,0,0)",
+		padding: 0,
+		backgroundColor: "rgb(0,0,0,0)",
+		rotate: index * 5 + -7.5 + "deg",
+		bottom: bottom + "%",
+	};
 	if (isSelected) {
-		style = {...style, borderColor: "white"};
+		style = {...style, position: "relative", bottom: bottom + 10 + "%", zIndex: 1};
 	}
 
 	return (
-		<button style={style} onClick={onClick}>
-			<AbilityComponent abilityJSON={abilityJSON} />
-		</button>
+		<div style={style} onClick={onClick}>
+			<AbilityComponent showBack={isSelected} abilityJSON={abilityJSON} />
+		</div>
 	);
 }

@@ -12,6 +12,7 @@ import ReactModal from "react-modal";
 import {AbilityComponent} from "@/components/AbilityComponent";
 import {PlayedCards} from "./components/PlayedCards";
 import {ChatComponent} from "./components/ChatComponent";
+import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function GamePage() {
 	const [initialized, setInitialized] = useState(false);
@@ -67,6 +68,9 @@ export default function GamePage() {
 
 	if (!initialized) return null;
 
+	let characterJSON = getCharacterJSON();
+	let enemyJSON = getEnemyJSON();
+
 	return (
 		<div id="gamePage" className={styles.gameContainer}>
 			<PlayedCards
@@ -76,7 +80,7 @@ export default function GamePage() {
 				enemyPlayedCards={enemyActions}
 			/>
 			<AbilityHand
-				abilityJSONList={getCharacterJSON().abilities}
+				abilityJSONList={characterJSON.abilities}
 				setPlayerPlayedCards={setPlayerPlayedCards}
 				setEnemyPlayedCards={setEnemyPlayedCards}
 				onRoundEnd={onRoundEnd}
@@ -86,17 +90,38 @@ export default function GamePage() {
 					display: "flex",
 					flexDirection: "row",
 					justifyContent: "space-between",
-					flex: 1,
+					flex: 0.6,
 				}}
 			>
 				<div style={inlineStyles.characterContainer}>
-					<CharacterComponent characterJSON={getCharacterJSON()} />
+					<div style={inlineStyles.divSeparation}>
+						<h1>{characterJSON.name}</h1>
+						<CharacterComponent characterJSON={characterJSON} />
+					</div>
+
+					<ProgressBar
+						isLabelVisible={false}
+						completed={(playerState.health / characterJSON.health) * 100}
+						width="25vh"
+						bgColor="#d94747"
+						baseBgColor="#9b9b9b"
+					/>
 					<h2>{playerState.health}</h2>
 					<h2>{playerState.mana}</h2>
 				</div>
 				<ChatComponent chatMessages={chatMessages} />
 				<div style={inlineStyles.characterContainer}>
-					<CharacterComponent characterJSON={getEnemyJSON()} />
+					<div style={inlineStyles.divSeparation}>
+						<h1>{enemyJSON.name}</h1>
+						<CharacterComponent characterJSON={enemyJSON} />
+					</div>
+					<ProgressBar
+						isLabelVisible={false}
+						completed={(enemyState.health / enemyJSON.health) * 100}
+						width="25vh"
+						bgColor="#d94747"
+						baseBgColor="#9b9b9b"
+					/>
 					<h2>{enemyState.health}</h2>
 					<h2>{enemyState.mana}</h2>
 				</div>
@@ -112,6 +137,12 @@ const inlineStyles = {
 		justifyContent: "center",
 		flex: 0.2,
 		flexDirection: "column",
-		backgroundColor: "red",
+	},
+	divSeparation: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		flexDirection: "column",
+		margin: "1.5vh",
 	},
 };
