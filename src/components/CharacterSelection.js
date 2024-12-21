@@ -17,29 +17,7 @@ import {addCharacterJSONToDatabase, getDatabaseCharacterJSON} from "@/firebase";
 import characterCardBorder from "../assets/characterCardBorder.png";
 
 export function CharacterSelectionList({onClick}) {
-	const [playerJSON, setPlayerJSON] = useState("");
-
-	let list = [];
-	useEffect(() => {
-		getDatabaseCharacterJSON().then(({playerJSON, enemyJSON}) => {
-			console.log("player json");
-			console.log(playerJSON);
-			setEnemyJSON(enemyJSON);
-			setCharacterJSON(playerJSON);
-			setPlayerJSON(playerJSON);
-		});
-		/*generateCharacters(2).then((characterJSONString) => {
-			let json = JSON.parse(characterJSONString);
-
-			let enemyJSON = json.characters[0];
-			json.characters.splice(0, 1);
-
-			loadImages(json.characters[0], enemyJSON);
-			addCharacterJSONToDatabase(json.characters[0], enemyJSON);
-		});*/
-	}, []);
-
-	if (playerJSON == "") {
+	if (getCharacterJSON() == {}) {
 		return null;
 	} else {
 		let list = [];
@@ -52,7 +30,9 @@ export function CharacterSelectionList({onClick}) {
 				/>
 			);
 		}*/
-		list.push(<CharacterComponent key={0} onClick={onClick} characterJSON={playerJSON} />);
+		list.push(
+			<CharacterComponent key={0} onClick={onClick} characterJSON={getCharacterJSON()} />
+		);
 		return <div className={styles.characterListContainer}>{list}</div>;
 	}
 }
@@ -195,43 +175,4 @@ export function CharacterComponent({characterJSON, onClick}) {
 			/>
 		</div>
 	);
-}
-
-function loadImages(characterJSON, enemyJSON) {
-	let url =
-		"https://image.pollinations.ai/prompt/" +
-		characterJSON.imagePrompt +
-		"?width=256&height=256&model=flux&seed=42&nologo=true";
-
-	fetch(url, {
-		method: "GET",
-		mode: "cors",
-	}).then((response) => console.log(response));
-
-	url =
-		"https://image.pollinations.ai/prompt/" +
-		enemyJSON.imagePrompt +
-		"?width=256&height=256&model=flux&seed=42&nologo=true";
-
-	fetch(url, {
-		method: "GET",
-		mode: "cors",
-	}).then((response) => console.log(response));
-
-	let abilities = [...characterJSON.abilities, ...enemyJSON.abilities];
-	for (let i = 0; i < abilities.length; i++) {
-		let imagePrompt = abilities[i].imagePrompt;
-
-		const url =
-			"https://image.pollinations.ai/prompt/" +
-			imagePrompt +
-			"?width=256&height=256&model=flux&seed=42&nologo=true";
-
-		console.log(imagePrompt);
-
-		fetch(url, {
-			method: "GET",
-			mode: "cors",
-		}).then((response) => console.log(response));
-	}
 }
