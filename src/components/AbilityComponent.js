@@ -21,6 +21,7 @@ export function AbilityComponent({abilityJSON, showBack}) {
 					position: "absolute",
 					pointerEvents: "none",
 					zIndex: 1,
+					filter: "drop-shadow(0px 10px 10px rgba(0,0,0,0.3))",
 				}}
 				width={"97%"}
 				src={cardBorder.src}

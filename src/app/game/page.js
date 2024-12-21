@@ -23,7 +23,7 @@ export default function GamePage() {
 	const [playerState, setPlayerState] = useState({});
 	const [enemyState, setEnemyState] = useState({});
 
-	const [chatMessages, setChatMessages] = useState([]);
+	const [chatMessagesJSON, setChatMessagesJSON] = useState([]);
 
 	useEffect(() => {
 		initializeActionAI();
@@ -63,7 +63,7 @@ export default function GamePage() {
 		setPlayerState(playerState);
 		setEnemyState(enemyState);
 
-		setChatMessages([...chatMessages, resultJSON.description]);
+		setChatMessagesJSON([...chatMessagesJSON, resultJSON]);
 	}
 
 	if (!initialized) return null;
@@ -99,33 +99,41 @@ export default function GamePage() {
 						<CharacterComponent characterJSON={characterJSON} />
 					</div>
 
-					<ProgressBar
-						isLabelVisible={false}
-						completed={(playerState.health / characterJSON.health) * 100}
-						width="25vh"
-						bgColor="#d94747"
-						baseBgColor="#9b9b9b"
-					/>
-					<h2>{playerState.health}</h2>
-					<h2>{playerState.mana}</h2>
+					<HealthBarComponent state={playerState} json={characterJSON} />
 				</div>
-				<ChatComponent chatMessages={chatMessages} />
+				<ChatComponent chatMessagesJSON={chatMessagesJSON} />
 				<div style={inlineStyles.characterContainer}>
 					<div style={inlineStyles.divSeparation}>
 						<h1>{enemyJSON.name}</h1>
 						<CharacterComponent characterJSON={enemyJSON} />
 					</div>
-					<ProgressBar
-						isLabelVisible={false}
-						completed={(enemyState.health / enemyJSON.health) * 100}
-						width="25vh"
-						bgColor="#d94747"
-						baseBgColor="#9b9b9b"
-					/>
-					<h2>{enemyState.health}</h2>
-					<h2>{enemyState.mana}</h2>
+
+					<HealthBarComponent state={enemyState} json={enemyJSON} />
 				</div>
 			</div>
+		</div>
+	);
+}
+
+function HealthBarComponent({state, json}) {
+	return (
+		<div
+			style={{
+				width: "25vh",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<h2>HP: {Math.round(state.health)}</h2>
+			<ProgressBar
+				isLabelVisible={false}
+				completed={(state.health / json.health) * 100}
+				width={"25vh"}
+				bgColor="#bd3a3a"
+				baseBgColor="#2a2d2f"
+			/>
 		</div>
 	);
 }
@@ -137,6 +145,8 @@ const inlineStyles = {
 		justifyContent: "center",
 		flex: 0.2,
 		flexDirection: "column",
+		backgroundColor: "#32373d",
+		color: "white",
 	},
 	divSeparation: {
 		display: "flex",

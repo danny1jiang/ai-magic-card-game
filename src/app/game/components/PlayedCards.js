@@ -7,7 +7,7 @@ export function PlayedCards({show, playerPlayedCards, enemyPlayedCards, closeMod
 	console.log(enemyPlayedCards);
 	if (!show) return null;
 
-	if (enemyPlayedCards === undefined) return null;
+	if (playerPlayedCards === undefined) return null;
 
 	let playerPlayedCardsComponents = [];
 	for (let i = 0; i < playerPlayedCards.length; i++) {
@@ -17,10 +17,12 @@ export function PlayedCards({show, playerPlayedCards, enemyPlayedCards, closeMod
 	}
 
 	let enemyPlayedCardsComponents = [];
-	for (let i = 0; i < enemyPlayedCards.length; i++) {
-		enemyPlayedCardsComponents.push(
-			<AbilityComponent key={i} abilityJSON={enemyPlayedCards[i]} />
-		);
+	if (enemyPlayedCards !== undefined) {
+		for (let i = 0; i < enemyPlayedCards.length; i++) {
+			enemyPlayedCardsComponents.push(
+				<AbilityComponent key={i} abilityJSON={enemyPlayedCards[i]} />
+			);
+		}
 	}
 
 	return (
