@@ -138,7 +138,7 @@ export function CharacterComponent({characterJSON, onClick}) {
 					bottom: 0,
 					height: "32%",
 					width: "70%",
-					fontSize: "1vh",
+					fontSize: "0.7vh",
 				}}
 			>
 				<h2>{description}</h2>

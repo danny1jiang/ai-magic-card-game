@@ -28,9 +28,9 @@ export async function getDatabaseCharacterJSON() {
 	let playerJSON = {};
 	let enemyJSON = {};
 	const querySnapshot = await getDocs(collection(db, "playerJSON"));
-	playerJSON = querySnapshot.docs[0].data();
+	playerJSON = querySnapshot.docs[2].data();
 
 	const querySnapshot2 = await getDocs(collection(db, "enemyJSON"));
-	enemyJSON = querySnapshot2.docs[0].data();
+	enemyJSON = querySnapshot2.docs[2].data();
 	return {playerJSON: playerJSON, enemyJSON: enemyJSON};
 }
