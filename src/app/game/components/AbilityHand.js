@@ -6,6 +6,8 @@ import {CustomButton} from "@/components/CustomButton";
 import {GameState} from "@/game/gameState";
 import goldenRim from "../../../assets/goldenRim.png";
 import {ManaCountComponent} from "./ManaCountComponent";
+import {initializeActionAI} from "@/ai/actionAI";
+import {initializeEnemyAI} from "@/ai/enemyAI";
 
 export function AbilityHand({hasWon, setPlayerPlayedCards, setEnemyPlayedCards, onRoundEnd}) {
 	const [currentHand, setCurrentHand] = useState([]);
@@ -50,17 +52,37 @@ export function AbilityHand({hasWon, setPlayerPlayedCards, setEnemyPlayedCards, 
 
 		if (manaCost !== 0 && manaCost > GameState.getPlayerMana()) return;
 
-		setPlayerPlayedCards(playerPlayedCards);
-		let promise = playActions(selectedCards);
-		setCurrentHand([...getPlayerHand()]);
-		setSelectedCards([]);
-		setManaCost(0);
-		setManaCount(manaCount - manaCost);
-
-		let {playerActions, enemyActions, resultJSON} = await promise;
-		setManaCount(Math.min(GameState.getMaxMana(), manaCount - manaCost + 2));
-		setEnemyPlayedCards(enemyActions);
-		onRoundEnd(resultJSON);
+		try {
+			setPlayerPlayedCards(playerPlayedCards);
+			let promise = playActions(selectedCards);
+			setCurrentHand([...getPlayerHand()]);
+			setSelectedCards([]);
+			setManaCost(0);
+			setManaCount(manaCount - manaCost);
+			let {playerActions, enemyActions, resultJSON} = await promise;
+			setManaCount(Math.min(GameState.getMaxMana(), manaCount - manaCost + 2));
+			setEnemyPlayedCards(enemyActions);
+			onRoundEnd(resultJSON);
+		} catch (error) {
+			console.log(error);
+			let json = {
+				description: "Error: AI overloaded",
+				player: {
+					damageTaken: 0,
+					buffs: [],
+					debuffs: [],
+				},
+				enemy: {
+					damageTaken: 0,
+					buffs: [],
+					debuffs: [],
+				},
+			};
+			setEnemyPlayedCards([]);
+			onRoundEnd(json);
+			initializeActionAI();
+			initializeEnemyAI();
+		}
 	}
 
 	function handleSelect(num) {

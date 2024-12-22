@@ -67,8 +67,6 @@ export async function initializeEnemyAI(enemyCharacterJSON) {
 			"\nI will give you a hand of actions to use - you must only use actions from the hand I will provide you. Return the name of your actions and why you chose this. In your reasoning, include a step by step mana calculation. If your mana becomes negative, BE SURE TO REWORK YOUR STRATEGY SO YOUR MANA DOES NOT BECOME NEGATIVE. In your reasoning and zFinalActionReasoning, include a detailed explanation of the mana usage. Make sure your character has this action in their list of abilities. If you are unable to perform certain actions, rework your strategy and return your final action names under zFinalActionNames. Remember that your final actions must be from the list of actions I provide you in the next message. Limit your reasoning to at most 20 words.",
 	});
 
-	console.log(enemyCharacterJSON);
-
 	chatSession = model.startChat({
 		generationConfig,
 		history: [],
@@ -85,7 +83,7 @@ export async function getEnemyAIActions() {
 	let playerMana = GameState.getPlayerMana();
 	let enemyMana = GameState.getEnemyMana();
 
-	const result = await chatSession.sendMessage(
+	let result = await chatSession.sendMessage(
 		"Player Health: " +
 			playerHealth +
 			", Enemy Health: " +
