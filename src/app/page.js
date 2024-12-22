@@ -6,7 +6,12 @@ import {CharacterInfoModal, CharacterSelectionList} from "@/components/Character
 import ReactModal from "react-modal";
 import {useEffect, useState} from "react";
 import {BackButton} from "@/components/BackButton";
-import {addCharacterJSONToDatabase, getDatabaseCharacterJSON} from "@/firebase";
+import {
+	addCharacterJSONToDatabase,
+	getDatabaseCharacterIndex,
+	getDatabaseCharacterJSON,
+	setDatabaseCharacterIndex,
+} from "@/firebase";
 import {setCharacterJSON, setEnemyJSON} from "@/game/gameInfo";
 import {generateCharacters} from "@/ai/characterGenerationAI";
 import {loadImages} from "@/utils/imageUtils";
@@ -27,7 +32,7 @@ export default function Home() {
 			setCharacterJSON(playerJSON);
 			setLoadedChar(true);
 		});
-		/*generateCharacters(2).then((characterJSONString) => {
+		generateCharacters(2).then((characterJSONString) => {
 			let json = JSON.parse(characterJSONString);
 
 			let enemyJSON = json.characters[0];
@@ -35,7 +40,9 @@ export default function Home() {
 
 			loadImages(json.characters[0], enemyJSON);
 			addCharacterJSONToDatabase(json.characters[0], enemyJSON);
-		});*/
+		});
+		setDatabaseCharacterIndex(getDatabaseCharacterIndex() + 1);
+		//window.localStorage.clear();
 	}, []);
 
 	function handleCharacterClick(stringJSON) {

@@ -28,10 +28,17 @@ export async function getDatabaseCharacterJSON() {
 	let playerJSON = {};
 	let enemyJSON = {};
 	const querySnapshot = await getDocs(collection(db, "playerJSON"));
-	playerJSON = querySnapshot.docs[1].data();
+
+	let index1 = getDatabaseCharacterIndex();
+	let index2 = index1;
+	if (index1 >= querySnapshot.size) {
+		index1 = Math.floor(Math.random() * querySnapshot.size);
+		index2 = Math.floor(Math.random() * querySnapshot.size);
+	}
+	playerJSON = querySnapshot.docs[index1].data();
 
 	const querySnapshot2 = await getDocs(collection(db, "enemyJSON"));
-	enemyJSON = querySnapshot2.docs[1].data();
+	enemyJSON = querySnapshot2.docs[index2].data();
 	return {playerJSON: playerJSON, enemyJSON: enemyJSON};
 }
 
@@ -43,7 +50,11 @@ export function setDatabaseCharacterIndex(index) {
 
 export function getDatabaseCharacterIndex() {
 	if (global.window !== undefined) {
-		const index = parseInt(global.window.localStorage.getItem("characterIndex"));
+		let stringIndex = global.window.localStorage.getItem("characterIndex");
+		if (stringIndex === null) return 0;
+		const index = parseInt(stringIndex);
+		if (index == NaN) return 0;
 		return index;
 	}
+	return 0;
 }
