@@ -40,6 +40,7 @@ export default function Home() {
 			addCharacterJSONToDatabase(json.characters[0], enemyJSON);
 		});
 		setDatabaseCharacterIndex(getDatabaseCharacterIndex() + 1);
+		//setDatabaseCharacterIndex(6);
 		//window.localStorage.clear();
 	}, []);
 
