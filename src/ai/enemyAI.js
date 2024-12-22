@@ -98,7 +98,6 @@ export async function getEnemyAIActions() {
 			"Current abilities in hand:" +
 			getEnemyHand()
 	);
-	console.log(result.response.text());
 	const response = JSON.parse(result.response.text());
 
 	let finalActionNames = [];

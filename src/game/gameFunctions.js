@@ -9,7 +9,6 @@ export async function startNewRound(playedActions) {
 	let enemyActionNames = await getEnemyAIActions();
 	let enemyActionIndices = [];
 	enemyActionNames.forEach((actionName) => {
-		console.log(getEnemyJSON().abilities);
 		enemyActionIndices.push(getEnemyJSON().abilities.indexOf(actionName));
 		enemyActions.push(getEnemyJSON().abilities.find((ability) => ability.name === actionName));
 	});
@@ -54,11 +53,6 @@ export async function startNewRound(playedActions) {
 
 	GameState.setPlayerMana(Math.max(Math.min(GameState.getMaxMana(), newPlayerMana), 0));
 	GameState.setEnemyMana(Math.max(Math.min(GameState.getMaxMana(), newEnemyMana), 0));
-
-	console.log(GameState.getPlayerHealth());
-	console.log(GameState.getEnemyHealth());
-	console.log(GameState.getPlayerMana());
-	console.log(GameState.getEnemyMana());
 
 	return {
 		enemyActions: enemyActions,

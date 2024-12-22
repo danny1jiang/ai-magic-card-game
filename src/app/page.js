@@ -26,8 +26,6 @@ export default function Home() {
 	useEffect(() => {
 		ReactModal.setAppElement("#appElement");
 		getDatabaseCharacterJSON().then(({playerJSON, enemyJSON}) => {
-			console.log("player json");
-			console.log(playerJSON);
 			setEnemyJSON(enemyJSON);
 			setCharacterJSON(playerJSON);
 			setLoadedChar(true);
@@ -46,7 +44,6 @@ export default function Home() {
 	}, []);
 
 	function handleCharacterClick(stringJSON) {
-		console.log(stringJSON);
 		setStringJSON(stringJSON);
 		setShowModal(true);
 	}
