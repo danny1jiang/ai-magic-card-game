@@ -115,7 +115,7 @@ export default function GamePage() {
 				<div style={inlineStyles.characterContainer}>
 					<div style={inlineStyles.divSeparation}>
 						<h1>{characterJSON.name}</h1>
-						<CharacterComponent characterJSON={characterJSON} />
+						<CharacterComponent characterJSON={characterJSON} onClick={() => {}} />
 					</div>
 
 					<HealthBarComponent state={playerState} json={characterJSON} />
@@ -124,7 +124,7 @@ export default function GamePage() {
 				<div style={inlineStyles.characterContainer}>
 					<div style={inlineStyles.divSeparation}>
 						<h1>{enemyJSON.name}</h1>
-						<CharacterComponent characterJSON={enemyJSON} />
+						<CharacterComponent characterJSON={enemyJSON} onClick={() => {}} />
 					</div>
 
 					<HealthBarComponent state={enemyState} json={enemyJSON} />
