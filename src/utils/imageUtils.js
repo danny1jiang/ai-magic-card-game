@@ -8,11 +8,17 @@ export async function loadImages(characterJSON, enemyJSON) {
 
 	let status = -1;
 	while (status !== 200) {
-		let response = await fetch(url, {
-			method: "GET",
-			mode: "cors",
-		});
-		status = response.status;
+		let response = {};
+		try {
+			response = await fetch(url, {
+				method: "GET",
+				mode: "cors",
+			});
+			status = response.status;
+		} catch (error) {
+			console.log(error);
+			status = -1;
+		}
 		console.log(response);
 	}
 
@@ -23,11 +29,17 @@ export async function loadImages(characterJSON, enemyJSON) {
 
 	status = -1;
 	while (status !== 200) {
-		let response = await fetch(url, {
-			method: "GET",
-			mode: "cors",
-		});
-		status = response.status;
+		let response = {};
+		try {
+			response = await fetch(url, {
+				method: "GET",
+				mode: "cors",
+			});
+			status = response.status;
+		} catch (error) {
+			console.log(error);
+			status = -1;
+		}
 		console.log(response);
 	}
 
@@ -44,11 +56,17 @@ export async function loadImages(characterJSON, enemyJSON) {
 
 		let status = -1;
 		while (status !== 200) {
-			let response = await fetch(url, {
-				method: "GET",
-				mode: "cors",
-			});
-			status = response.status;
+			let response = {};
+			try {
+				response = await fetch(url, {
+					method: "GET",
+					mode: "cors",
+				});
+				status = response.status;
+			} catch (error) {
+				console.log(error);
+				status = -1;
+			}
 			console.log(response);
 		}
 	}
