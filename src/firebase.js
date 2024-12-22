@@ -7,6 +7,7 @@ import {firebaseConfig} from "./firebaseConfig";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const databaseLength = (await getDocs(collection(db, "playerJSON"))).size;
 
 export function getDatabase() {
 	return db;
@@ -43,6 +44,9 @@ export async function getDatabaseCharacterJSON() {
 }
 
 export function setDatabaseCharacterIndex(index) {
+	if (index > databaseLength) {
+		index = databaseLength;
+	}
 	if (global.window !== undefined) {
 		global.window.localStorage.setItem("characterIndex", index);
 	}
