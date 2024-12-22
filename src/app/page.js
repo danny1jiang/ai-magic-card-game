@@ -30,7 +30,7 @@ export default function Home() {
 			setCharacterJSON(playerJSON);
 			setLoadedChar(true);
 		});
-		generateCharacters(2).then((characterJSONString) => {
+		/*generateCharacters(2).then((characterJSONString) => {
 			let json = JSON.parse(characterJSONString);
 
 			let enemyJSON = json.characters[0];
@@ -38,7 +38,7 @@ export default function Home() {
 
 			loadImages(json.characters[0], enemyJSON);
 			addCharacterJSONToDatabase(json.characters[0], enemyJSON);
-		});
+		});*/
 		setDatabaseCharacterIndex(getDatabaseCharacterIndex() + 1);
 		//setDatabaseCharacterIndex(6);
 		//window.localStorage.clear();
