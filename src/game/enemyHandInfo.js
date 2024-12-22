@@ -36,6 +36,7 @@ export function enemyPlayActions(hand) {
 	let newHand = [];
 	for (let i = 0; i < currentHand.length; i++) {
 		if (!hand.includes(i)) {
+			console.log(hand);
 			newHand.push(currentHand[i]);
 		}
 	}

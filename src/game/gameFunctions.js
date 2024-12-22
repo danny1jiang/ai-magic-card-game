@@ -2,15 +2,22 @@ import {executeRoundActions} from "@/ai/actionAI";
 import {getEnemyAIActions} from "@/ai/enemyAI";
 import {getEnemyJSON} from "./gameInfo";
 import {GameState} from "./gameState";
-import {enemyPlayActions} from "./enemyHandInfo";
+import {enemyPlayActions, getEnemyHand} from "./enemyHandInfo";
 
 export async function startNewRound(playedActions) {
 	let enemyActions = [];
 	let enemyActionNames = await getEnemyAIActions();
 	let enemyActionIndices = [];
 	enemyActionNames.forEach((actionName) => {
-		enemyActionIndices.push(getEnemyJSON().abilities.indexOf(actionName));
-		enemyActions.push(getEnemyJSON().abilities.find((ability) => ability.name === actionName));
+		let abilityJSON = getEnemyJSON().abilities.find((ability) => ability.name === actionName);
+		let index = 0;
+		getEnemyHand().forEach((ability) => {
+			if (ability.name === actionName) {
+				enemyActionIndices.push(index);
+			}
+			index++;
+		});
+		enemyActions.push(abilityJSON);
 	});
 	enemyPlayActions(enemyActionIndices);
 

@@ -63,9 +63,8 @@ export async function initializeEnemyAI(enemyCharacterJSON) {
 	const model = genAI.getGenerativeModel({
 		model: "gemini-2.0-flash-exp",
 		systemInstruction:
-			'You will be an AI enemy going against the player for a magic themed card game. You will be playing as the "enemy". Based on the history of our chat (it will include what happened during gameplay), you will select one or more actions to take. Use the chat history to your advantage: if an action combo was successful, you can try it again. Somtimes, it is better to save up mana instead of using an action. If you cannot play any actions due to not enough mana, do not play any actions. THE COST OF YOUR ACTIONS CANNOT EXCEED YOUR MANA COUNT. YOU CANNOT USE THE SAME ACTION TWICE. This is your character and their actions:\n' +
-			JSON.stringify(enemyCharacterJSON) +
-			"\nI will give you a hand of actions to use - you must only use actions from the hand I will provide you. Return the name of your actions and why you chose this. In your reasoning, include a step by step mana calculation. If your mana becomes negative, BE SURE TO REWORK YOUR STRATEGY SO YOUR MANA DOES NOT BECOME NEGATIVE. In your reasoning and zFinalActionReasoning, include a detailed explanation of the mana usage. Make sure your character has this action in their list of abilities. If you are unable to perform certain actions, rework your strategy and return your final action names under zFinalActionNames. Limit your reasoning to at most 20 words.",
+			'You will be an AI enemy going against the player for a magic themed card game. You will be playing as the "enemy". Based on the history of our chat (it will include what happened during gameplay), you will select one or more actions to take. Use the chat history to your advantage: if an action combo was successful, you can try it again. Somtimes, it is better to save up mana instead of using an action. If you cannot play any actions due to not enough mana, do not play any actions. THE COST OF YOUR ACTIONS CANNOT EXCEED YOUR MANA COUNT.' +
+			"\nI will give you a hand of actions to use - you must only use actions from the hand I will provide you. Return the name of your actions and why you chose this. In your reasoning, include a step by step mana calculation. If your mana becomes negative, BE SURE TO REWORK YOUR STRATEGY SO YOUR MANA DOES NOT BECOME NEGATIVE. In your reasoning and zFinalActionReasoning, include a detailed explanation of the mana usage. Make sure your character has this action in their list of abilities. If you are unable to perform certain actions, rework your strategy and return your final action names under zFinalActionNames. Remember that your final actions must be from the list of actions I provide you in the next message. Limit your reasoning to at most 20 words.",
 	});
 
 	console.log(enemyCharacterJSON);
@@ -96,9 +95,12 @@ export async function getEnemyAIActions() {
 			", Enemy mana: " +
 			enemyMana +
 			"Current abilities in hand:" +
-			getEnemyHand()
+			JSON.stringify(getEnemyHand())
 	);
 	const response = JSON.parse(result.response.text());
+
+	console.log(getEnemyHand());
+	console.log(response);
 
 	let finalActionNames = [];
 	let finalActionCost = 0;
