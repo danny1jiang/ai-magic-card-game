@@ -21,6 +21,9 @@ const generationConfig = {
 					damageTaken: {
 						type: "number",
 					},
+					healthHealed: {
+						type: "number",
+					},
 					buffs: {
 						type: "array",
 						items: {
@@ -58,12 +61,15 @@ const generationConfig = {
 						},
 					},
 				},
-				required: ["damageTaken", "buffs", "debuffs"],
+				required: ["damageTaken", "healthHealed", "buffs", "debuffs"],
 			},
 			enemy: {
 				type: "object",
 				properties: {
 					damageTaken: {
+						type: "number",
+					},
+					healthHealed: {
 						type: "number",
 					},
 					buffs: {
@@ -103,7 +109,7 @@ const generationConfig = {
 						},
 					},
 				},
-				required: ["damageTaken", "buffs", "debuffs"],
+				required: ["damageTaken", "healthHealed", "buffs", "debuffs"],
 			},
 			arenaEffects: {
 				type: "array",

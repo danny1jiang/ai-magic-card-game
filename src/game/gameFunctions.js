@@ -1,6 +1,6 @@
 import {executeRoundActions} from "@/ai/actionAI";
 import {getEnemyAIActions} from "@/ai/enemyAI";
-import {getEnemyJSON} from "./gameInfo";
+import {getCharacterJSON, getEnemyJSON} from "./gameInfo";
 import {GameState} from "./gameState";
 import {enemyPlayActions, getEnemyHand} from "./enemyHandInfo";
 
@@ -32,15 +32,20 @@ export async function startNewRound(playedActions) {
 	let playerHealth = GameState.getPlayerHealth();
 	let enemyHealth = GameState.getEnemyHealth();
 
+	let playerMaxHealth = getCharacterJSON().health;
+	let enemyMaxHealth = getEnemyJSON().health;
+
 	let playerDamage = resultJSON.player.damageTaken;
 	let enemyDamage = resultJSON.enemy.damageTaken;
 
-	let newPlayerHealth = playerHealth - playerDamage;
-	let newEnemyHealth = enemyHealth - enemyDamage;
+	let playerHeal = resultJSON.player.healthHealed;
+	let enemyHeal = resultJSON.enemy.healthHealed;
 
-	GameState.setPlayerHealth(Math.max(newPlayerHealth, 0));
-	GameState.setEnemyHealth(Math.max(newEnemyHealth, 0));
+	let newPlayerHealth = playerHealth - playerDamage + playerHeal;
+	let newEnemyHealth = enemyHealth - enemyDamage + enemyHeal;
 
+	GameState.setPlayerHealth(Math.min(Math.max(newPlayerHealth, 0), playerMaxHealth));
+	GameState.setEnemyHealth(Math.min(Math.max(newEnemyHealth, 0), enemyMaxHealth));
 	// Mana updates
 	let playerMana = GameState.getPlayerMana();
 	let enemyMana = GameState.getEnemyMana();

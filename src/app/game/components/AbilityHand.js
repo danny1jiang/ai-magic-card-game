@@ -69,11 +69,13 @@ export function AbilityHand({hasWon, setPlayerPlayedCards, setEnemyPlayedCards, 
 				description: "Error: AI overloaded",
 				player: {
 					damageTaken: 0,
+					healthHealed: 0,
 					buffs: [],
 					debuffs: [],
 				},
 				enemy: {
 					damageTaken: 0,
+					healthHealed: 0,
 					buffs: [],
 					debuffs: [],
 				},
